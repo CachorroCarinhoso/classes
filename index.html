@@ -1,85 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-  <title>classes</title>
-</head>
+    <meta charset="UTF-8">
+    <title>Exercício 1 - Países</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        #infoPais {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        #infoPais h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #infoPais p {
+            margin: 8px 0;
+        }
+
+        #infoPais span {
+            font-weight: bold;
+        }
+    </style>
 <body>
+    <h1>Exercício 1 - Lista de Países</h1>
+    
+    <label for="selectPaises">Selecione um país:</label>
+    <select id="selectPaises"></select>
+    
+    <div id="infoPais">
+        <h2>Informações do País Selecionado</h2>
+        <p><strong>Nome:</strong> <span id="nomePais"></span></p>
+        <p><strong>Gentílico:</strong> <span id="gentilicoPais"></span></p>
+        <p><strong>Sigla:</strong> <span id="siglaPais"></span></p>
+        <p><strong>Nome Internacional:</strong> <span id="nomeInternacionalPais"></span></p>
+    </div>
 
-<div class="turma" id="turma1Dados"></div>
-<div class="turma" id="turma2Dados"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const selectPaises = document.getElementById("selectPaises");
+            const nomePais = document.getElementById("nomePais");
+            const gentilicoPais = document.getElementById("gentilicoPais");
+            const siglaPais = document.getElementById("siglaPais");
+            const nomeInternacionalPais = document.getElementById("nomeInternacionalPais");
+            const infoPais = document.getElementById("infoPais");
 
-<script>
-class Pessoa {
-  constructor(cpf, nome) {
-    this.cpf = cpf;
-    this.nome = nome;
-  }
-}
+            fetch('https://gist.githubusercontent.com/jonasruth/61bde1fcf0893bd35eea/raw/10ce80ddeec6b893b514c3537985072bbe9bb265/paises-gentilicos-google-maps.json') // Substitua 'paises.json' pelo caminho correto do seu arquivo JSON
+                .then(response => response.json())
+                .then(data => {
+                    Object.keys(data).forEach(key => {
+                        const pais = data[key];
+                        const option = document.createElement("option");
+                        option.value = pais.nome_pais;
+                        option.textContent = pais.nome_pais;
+                        selectPaises.appendChild(option);
+                    });
 
-class Professor extends Pessoa {
-  constructor(cpf, nome, area, telefone) {
-    super(cpf, nome);
-    this.area = area;
-    this.telefone = telefone;
-  }
-}
+                    selectPaises.addEventListener('change', function() {
+                        const selectedCountry = selectPaises.value;
+                        const countryData = Object.values(data).find(pais => pais.nome_pais === selectedCountry);
 
-class Aluno extends Pessoa {
-  constructor(cpf, nome, matricula) {
-    super(cpf, nome);
-    this.matricula = matricula;
-  }
-}
-
-class Turma {
-  constructor(professor, alunos, identificacao) {
-    this.professor = professor;
-    this.alunos = alunos;
-    this.identificacao = identificacao;
-  }
-
-  imprimeDados(divId) {
-    let turmaDados = document.getElementById(divId);
-    turmaDados.innerHTML += "<div class='turma'>";
-    turmaDados.innerHTML += "<p>Turma: " + this.identificacao + "</p>";
-    turmaDados.innerHTML += "<p>Professor:</p>";
-    turmaDados.innerHTML += "<ul>";
-    turmaDados.innerHTML += "<li>CPF: " + this.professor.cpf + "</li>";
-    turmaDados.innerHTML += "<li>Nome: " + this.professor.nome + "</li>";
-    turmaDados.innerHTML += "<li>Área: " + this.professor.area + "</li>";
-    turmaDados.innerHTML += "<li>Telefone: " + this.professor.telefone + "</li>";
-    turmaDados.innerHTML += "</ul>";
-    turmaDados.innerHTML += "<p>Alunos:</p>";
-    for (let aluno of this.alunos) {
-      turmaDados.innerHTML += "<ul>";
-      turmaDados.innerHTML += "<li>CPF: " + aluno.cpf + "</li>";
-      turmaDados.innerHTML += "<li>Nome: " + aluno.nome + "</li>";
-      turmaDados.innerHTML += "<li>Matrícula: " + aluno.matricula + "</li>";
-      turmaDados.innerHTML += "</ul>";
-    }
-    turmaDados.innerHTML += "</div>";
-  }
-}
-
-const professor1 = new Professor("018.582.220-79", "Sérgio da Costa Bachini", "Matemática", "123-456-7890");
-const professor2 = new Professor("036.738.760-31", "Cláudia Cozza Pedroso", "Ciências", "987-654-3210");
-
-const aluno1 = new Aluno("603.784.810-61", "Martina Schmutz Pomponi", "A11");
-const aluno2 = new Aluno("028.603.050-09", "Maria Isabel Bitencourt Azevedo ", "A22");
-const aluno3 = new Aluno("902.763.570-60", "Tiago Hernandes Fossati", "A33");
-const aluno4 = new Aluno("247.332.470-01", "Carlos Pereira Gibbon ", "A44");
-const aluno5 = new Aluno("990.784.120-03", "Gustavo Gonçalves Vieira", "A55");
-const aluno6 = new Aluno("780.249.690-09", "Sofia Velloso Munhoz", "A66");
-const aluno7 = new Aluno("814.281.100-62", "Elias Veiga Bastos", "A77");
-const aluno8 = new Aluno("554.491.960-75", "Camila Costa Enriquez", "A88");
-const aluno9 = new Aluno("093.637.630-99", "Luana Lima Alvares", "A99");
-
-const turma1 = new Turma(professor1, [aluno1, aluno2, aluno3, aluno4], "Turma de Matemática");
-const turma2 = new Turma(professor2, [aluno5, aluno6, aluno7, aluno8, aluno9], "Turma de Ciências");
-
-turma1.imprimeDados("turma1Dados");
-turma2.imprimeDados("turma2Dados");
-</script>
-
+                        if (countryData) {
+                            nomePais.textContent = countryData.nome_pais;
+                            gentilicoPais.textContent = countryData.gentilico;
+                            siglaPais.textContent = countryData.sigla;
+                            nomeInternacionalPais.textContent = countryData.nome_pais_int;
+                            infoPais.style.display = 'block';
+                        } else {
+                            infoPais.style.display = 'none';
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Ocorreu um erro ao carregar os países:', error);
+                });
+        });
+    </script>
 </body>
 </html>
